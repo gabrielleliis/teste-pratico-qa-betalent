@@ -1,0 +1,6 @@
+# Dependências do Node
+node_modules/
+
+# Arquivos gerados pelo Cypress
+cypress/videos/
+cypress/screenshots/
