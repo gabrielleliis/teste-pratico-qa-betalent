@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -22,5 +22,5 @@ jobs:
         run: npm install -g newman
 
       - name: Rodar Collection do Restful-Booker
-        # ATENÇÃO AQUI: O nome do arquivo entre aspas deve ser IDÊNTICO ao JSON que você exportou!
-        run: newman run "BeTalent - Restful-Booker API.postman_collection.json"
+        # Injetamos a variável de ambiente dinamicamente no momento da execução
+        run: newman run "BeTalent - Restful-Booker API.postman_collection.json" --env-var "base_url=https://restful-booker.herokuapp.com"
