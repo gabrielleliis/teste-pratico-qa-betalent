@@ -1,0 +1,26 @@
+name: Execução de Testes de API - BeTalent
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Instalar Newman (Postman CLI)
+        run: npm install -g newman
+
+      - name: Rodar Collection do Restful-Booker
+        # ATENÇÃO AQUI: O nome do arquivo entre aspas deve ser IDÊNTICO ao JSON que você exportou!
+        run: newman run "BeTalent - Restful-Booker API.postman_collection.json"
