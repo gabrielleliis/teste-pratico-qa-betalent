@@ -1,80 +1,103 @@
-# 🎯 Desafio Técnico QA - BeTalent
+﻿# Desafio Técnico QA - BeTalent
 
-Este repositório contém a resolução do desafio técnico prático para a vaga de QA (Quality Assurance) na BeTalent. O projeto engloba testes de API (Restful-Booker) e automação E2E de Interface (Sauce Demo), utilizando padrões de projeto e boas práticas de engenharia de software.
+Este repositório contém a documentação e o código-fonte da resolução do desafio técnico prático para a vaga de QA (Quality Assurance) na BeTalent. O projeto abrange testes automatizados de API (Restful-Booker) e automação End-to-End (E2E) de Interface (Sauce Demo), integrados em uma pipeline de CI/CD.
 
-## 🛠️ Tecnologias e Arquitetura Utilizadas
-* **Cypress & JavaScript:** Automação de UI com padrão de Custom Commands e Data-Driven Testing (Fixtures).
-* **Postman:** Mapeamento e testes E2E de contrato e performance de API.
-* **Newman & GitHub Actions:** Implementação de pipeline de Integração Contínua (CI) para execução automatizada dos testes de API na nuvem.
-* **Node.js:** Gerenciamento de dependências.
+## Tecnologias e Frameworks Utilizados
 
----
+- **Cypress (v13+):** Framework principal para automação de testes E2E de UI.
+- **JavaScript:** Linguagem base para a escrita dos testes da interface.
+- **Postman:** Ferramenta para mapeamento, modelagem e testes de contrato/integração da API.
+- **Newman:** CLI do Postman utilizado para executar a collection de testes da API localmente e na esteira.
+- **GitHub Actions:** Serviço de Integração Contínua (CI) para execução autônoma dos testes a cada push.
+- **Node.js & npm:** Gerenciamento de pacotes e dependências estruturais do projeto.
 
-## ⚙️ Parte 1: Testes de API (Restful-Booker)
+## Estrutura do Projeto (Árvore de Pastas)
 
-A validação da API foi estruturada no Postman, contemplando um CRUD completo (Autenticação, Criação, Busca, Atualização e Exclusão). 
+teste-pratico-qa-betalent/
+├── .github/workflows/
+│   └── api-tests.yml                  # Configuração da pipeline de CI/CD no GitHub Actions
+├── cypress/
+│   ├── e2e/
+│   │   └── saucedemo.cy.js            # Cenários de teste automatizados de interface
+  │   ├── fixtures/
+  │   │   └── massaDeDados.json          # Massa de dados externa (Data-Driven Testing)
+  │   └── support/
+  │       ├── commands.js                # Custom Commands para abstração de ações repetitivas
+  │       └── e2e.js                     # Configurações globais do framework Cypress
+├── evidencias-api/                    # Capturas de tela comprovando execuções e fluxos manuais
+├── .gitignore                         # Diretivas de arquivos ignorados pelo versionamento (node_modules, etc)
+├── BeTalent - Restful-Booker API.postman_collection.json   # Collection exportada do Postman contendo o CRUD mapeado
+├── cypress.config.js                  # Arquivo de configuração central de propriedades do Cypress
+├── package.json                       # Metadados do projeto, dependências instaladas e scripts
+└── README.md                          # Documentação central e guia de execução
 
-O arquivo da collection (`BeTalent - Restful-Booker API.postman_collection.json`) está anexado na raiz deste repositório.
+## Instalação e Configuração Local
 
-### 📌 Estratégia e Premissas Identificadas
-Durante a análise exploratória, identifiquei uma característica crucial da infraestrutura do Restful-Booker: **o banco de dados é volátil e reseta em curtos períodos de tempo (aprox. 10 minutos)**. 
-Para garantir a resiliência dos testes automatizados, a esteira foi desenhada de forma encadeada: a execução de métodos `GET`, `PUT` e `DELETE` depende intrinsecamente de um `POST` executado imediatamente antes, com passagem dinâmica de variáveis de ambiente (`bookingid` e `token`), garantindo que o recurso exista no momento da requisição.
+### Pré-requisitos
+Certifique-se de ter instalado em sua máquina:
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
 
-### 🚀 Nível 2 - Automação e Integração Contínua (CI/CD)
-Foram implementados scripts de validação na API garantindo:
-* **Validação de Contrato:** Tipagem estrita de dados e presença de campos obrigatórios.
-* **Performance:** Validação de tempo de resposta (`responseTime`) abaixo de limites aceitáveis (< 1000ms).
-* **CI/CD:** O projeto conta com um workflow do GitHub Actions que executa a suíte de testes da API via **Newman** a cada push no repositório, garantindo feedback contínuo.
+### Passos de Instalação
+1. Clone este repositório para a sua máquina local:
+```bash
+git clone https://github.com/gabrielleliis/teste-pratico-qa-betalent.git
+```
+2. Navegue até o diretório raiz do projeto:
+```bash
+cd teste-pratico-qa-betalent
+```
+3. Instale as dependências:
+```bash
+npm install
+```
 
----
+## Execução dos Testes
 
-## 💻 Parte 2: Testes E2E de Interface (Sauce Demo)
+### Parte 1: Testes E2E de Interface (Cypress)
+A automação de UI foi construída com foco em escalabilidade e manutenção, utilizando `Custom Commands` e separação de lógica de dados com `fixtures`.
 
-A automação do Front-end foi construída com Cypress, saindo de scripts procedurais básicos para uma arquitetura escalável utilizando `Custom Commands` (evitando repetição de código) e separação de massa de dados via `Fixtures`.
+- Para abrir a interface interativa do Cypress (Modo Visual):
+```bash
+npx cypress open
+```
+- Para executar os testes em background (Headless Mode):
+```bash
+npx cypress run
+```
 
-### 🚀 Como executar os testes de UI localmente
-1. Clone o repositório.
-2. Instale as dependências executando: `npm install`
-3. Abra a interface do Cypress: `npx cypress open` ou rode em modo headless: `npx cypress run`
+### Parte 2: Testes de API (Newman)
+Para rodar a suíte de testes de API localmente via terminal, instale o Newman globalmente utilizando:
+```bash
+npm install -g newman
+```
 
-### 📝 Cenários Automatizados
-* **Cenário 1:** Login com credenciais válidas (Caminho Feliz).
-* **Cenário 2:** Validação de segurança para usuário bloqueado (Caminho Triste).
-* **Cenário 3:** Fluxo transacional completo de compra (End-to-End).
+Em seguida, execute o comando abaixo, garantindo a injeção da variável de ambiente base do ambiente:
+```bash
+newman run "BeTalent - Restful-Booker API.postman_collection.json" --env-var "base_url=https://restful-booker.herokuapp.com"
+```
 
----
+**Nota sobre Execução Contínua:** Este repositório possui uma integração direta com o GitHub Actions. Qualquer push realizado no repositório disparará automaticamente a execução dos scripts de validação e contrato da API na nuvem.
 
-## 🐛 Relatório de Bugs (Testes Exploratórios)
+## Estratégias e Decisões Técnicas
 
-Durante a execução de fluxos alternativos, foram identificadas falhas críticas de usabilidade e renderização no sistema web.
+- **Resiliência de Dados NA API:** A infraestrutura da API do Restful-Booker reseta seus dados em curtos períodos de tempo. Para evitar *flaky tests* (testes falsos-negativos), a esteira foi construída de forma autossuficiente: a execução dos métodos de criação (`POST`) precede operações de busca (`GET`), atualização (`PUT`) e exclusão (`DELETE`), capturando e armazenando dinamicamente o `bookingid` e o `token` de autenticação em variáveis de coleção.
 
-### 🔴 BUG-001: Botão "Add to cart" inativo e falha no carregamento dos assets visuais do catálogo.
-* **Ambiente:** Sauce Demo (Perfil: `problem_user`)
-* **Severidade:** 🔴 Alta (Impede fluxo de compra e compromete a vitrine).
-* **Passos para reproduzir:**
-  1. Realizar login com as credenciais `problem_user` e `secret_sauce`.
-  2. Na tela principal (Inventory), tentar adicionar múltiplos produtos ao carrinho.
-* **Resultado Atual:** O sistema bloqueia a adição ao carrinho após 3 itens específicos ("Sauce Labs Bolt T-Shirt", "Sauce Labs Fleece Jacket", etc). O botão não responde e o badge do carrinho não atualiza. Além disso, todas as imagens dos produtos apresentam erro de rota, sendo renderizadas com o mesmo placeholder incorreto de um cachorro.
+## Relatório de Bugs (Testes Exploratórios)
 
-### 🔴 BUG-002: Falha no funcionamento do Filtro de Ordenação
-* **Ambiente:** Sauce Demo (Perfil: `problem_user` e `error_user`)
-* **Severidade:** Média
-* **Passos para reproduzir:**
-  1. Realizar login e acessar a página de Produtos.
-  2. Clicar no dropdown de filtros (canto superior direito).
-  3. Selecionar a ordenação "Name (Z to A)" ou "Price (low to high)".
-* **Resultado Atual:** A interface ignora o comando do usuário. A vitrine de produtos não é reordenada de acordo com o critério selecionado, mantendo a listagem estática padrão (A-Z), caracterizando falha na funcionalidade de filtro.
+Durante a exploração da interface web utilizando os perfis de exceção (`problem_user` e `error_user`), foram mapeados defeitos que comprometem a regra de negócio do Sauce Demo.
 
-### 🔴 BUG-003: Bloqueio na finalização de compra (Erro de Validação de Input)
-* **Ambiente:** Sauce Demo (Perfil: `error_user`)
-* **Severidade:** Crítica (Blocker)
-* **Passos para reproduzir:**
-  1. Realizar login com `error_user` e adicionar qualquer item ao carrinho.
-  2. Acessar o carrinho e clicar em "Checkout".
-  3. Preencher os dados corretamente (First Name, Last Name e Postal Code).
-  4. Clicar em "Continue".
-* **Resultado Atual:** O sistema apaga silenciosamente o input do campo "Last Name" no momento da submissão e exibe a mensagem de erro "Error: Last Name is required", impossibilitando o usuário de avançar para a tela de revisão e concluir a compra.
+- **BUG-001: Quebra de renderização e travamento do Carrinho**
+  - **Ambiente:** Sauce Demo (Perfil `problem_user`)
+  - **Severidade:** Alta
+  - **Comportamento:** O sistema bloqueia a adição de produtos ao carrinho após 3 itens específicos, inutilizando o botão "Add to cart". Simultaneamente, os assets (imagens) dos produtos apresentam falha de rota, renderizando placeholders incorretos.
 
----
+- **BUG-002: Falha no funcionamento do Filtro de Ordenação**
+  - **Ambiente:** Sauce Demo (Perfis `problem_user` ou `error_user`)
+  - **Severidade:** Média
+  - **Comportamento:** Ao utilizar o dropdown de ordenação (ex: "Name Z to A"), a interface ignora o critério selecionado. A vitrine permanece estática no padrão A-Z.
 
-*Desenvolvido por Gabriel Lelis Costa Santos.*
+- **BUG-003: Bloqueio na finalização de compra (Erro de Validação)**
+  - **Ambiente:** Sauce Demo (Perfil `error_user`)
+  - **Severidade:** Crítica (Blocker)
+  - **Comportamento:** Na tela de submissão do Checkout, ao preencher os dados e avançar, o sistema limpa silenciosamente o input "Last Name" e acusa erro de obrigatoriedade ("Error: Last Name is required"). O usuário é impedido de finalizar o fluxo transacional de compra.
