@@ -13,20 +13,21 @@ Este repositório contém a documentação e o código-fonte da resolução do d
 
 ## Estrutura do Projeto (Árvore de Pastas)
 
+```text
 teste-pratico-qa-betalent/
 ├── .github/workflows/
 │   └── api-tests.yml                  # Configuração da pipeline de CI/CD no GitHub Actions
 ├── cypress/
 │   ├── e2e/
 │   │   └── saucedemo.cy.js            # Cenários de teste automatizados de interface
-  │   ├── fixtures/
-  │   │   └── massaDeDados.json          # Massa de dados externa (Data-Driven Testing)
-  │   └── support/
-  │       ├── commands.js                # Custom Commands para abstração de ações repetitivas
-  │       └── e2e.js                     # Configurações globais do framework Cypress
+│   ├── fixtures/
+│   │   └── massaDeDados.json          # Massa de dados externa (Data-Driven Testing)
+│   └── support/
+│       ├── commands.js                # Custom Commands para abstração de ações repetitivas
+│       └── e2e.js                     # Configurações globais do framework Cypress
 ├── evidencias-api/                    # Capturas de tela comprovando execuções e fluxos manuais
-├── .gitignore                         # Diretivas de arquivos ignorados pelo versionamento (node_modules, etc)
-├── BeTalent - Restful-Booker API.postman_collection.json   # Collection exportada do Postman contendo o CRUD mapeado
+├── .gitignore                         # Diretivas de arquivos ignorados pelo versionamento
+├── BeTalent - Restful-Booker API...   # Collection exportada do Postman contendo o CRUD mapeado
 ├── cypress.config.js                  # Arquivo de configuração central de propriedades do Cypress
 ├── package.json                       # Metadados do projeto, dependências instaladas e scripts
 └── README.md                          # Documentação central e guia de execução
